@@ -73,7 +73,7 @@ The libraries required by the system are specified below.
 ## Running the System
 The system currently parses 2 formats of video data: mp4 files and sequence data from the TUM RGB-D dataset (https://vision.in.tum.de/data/datasets/rgbd-dataset). Once you have a sequence downloaded, run the system with the `-config <config_file.json>` argument to specify input data. Config files take the form of the following*:
 
-```
+```json
 {
 	"// INPUT DATA INFORMATION": "",
 	"inputDataPath": "../datasets/rgbd_dataset_freiburg3_long_office_household/",
