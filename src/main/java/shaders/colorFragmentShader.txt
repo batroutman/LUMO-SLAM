@@ -1,0 +1,14 @@
+#version 150
+
+in vec2 pass_textureCoordinates;
+in vec3 colour;
+
+out vec4 out_Color;
+
+uniform sampler2D modelTexture;
+
+void main(void){
+
+	out_Color = vec4(colour, 1);
+
+}

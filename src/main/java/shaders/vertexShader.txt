@@ -1,0 +1,20 @@
+#version 150
+
+in vec3 position;
+in vec2 textureCoordinates;
+
+out vec3 colour;
+out vec2 pass_textureCoordinates;
+
+uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform vec3 customColor;
+
+void main(void){
+
+	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(position,1.0);
+	pass_textureCoordinates = textureCoordinates;
+	// pass_textureCoordinates = vec2(gl_Position[0] / gl_Position[2], gl_Position[1] / gl_Position[2]);
+	colour = customColor;
+}
