@@ -228,11 +228,8 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 
 						// if heavily violating motion model, assume error
 						if (this.map.getCurrentKeyframe().getFrameNum() - this.map.getLastLoopClosed() > 1
-								&& Utils.poseDistance(pose,
-										Utils.getPoseEstimate(this.lastRecordedPose, this.latestPose, this.poseVelocity,
-												this.frameNum)) > 100
-														* Math.pow(this.motionModelUncertaintyFactor,
-																this.frameNum - this.lastRecordedPose)) {
+								&& Utils.poseDistance(pose, Utils.getPoseEstimate(this.lastRecordedPose,
+										this.latestPose, this.poseVelocity, this.frameNum)) > 10) {
 							Utils.pl("MOTION MODEL VIOLATED: "
 									+ Utils.poseDistance(pose, Utils.getPoseEstimate(this.lastRecordedPose,
 											this.latestPose, this.poseVelocity, this.frameNum)));
@@ -250,7 +247,8 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 								avg, stdDev, median);
 
 						// check for poor tracking
-						if (inlierRate.getValue() < 0.5 || numTracked.getValue() < 10) {
+						Utils.pl("\n\nINLIER RATE: " + inlierRate.getValue() + "\n\n");
+						if (inlierRate.getValue() < 0.6 || numTracked.getValue() < 10) {
 							Utils.pl("inlierRate: " + inlierRate);
 							Utils.pl("numTracked: " + numTracked);
 							throw new TrackingException();

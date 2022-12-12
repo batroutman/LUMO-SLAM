@@ -1,9 +1,9 @@
 {
 	"// INPUT DATA INFORMATION": "",
-	"inputDataPath": "../customdata/initial/prepped_object_001.mp4",
+	"-inputDataPath": "../customdata/initial/prepped_object_001.mp4",
 	"--inputDataPath": "../customdata/initial/book_003.mp4",
 	"---inputDataPath": "../customdata/initial/xbox_controller_001.mp4",
-	"----inputDataPath": "../customdata/initial/oats_002.mp4",
+	"inputDataPath": "../customdata/initial/oats_002.mp4",
 	"bufferType": "MP4",
 	"bowVocabFile": "../BoW/ORBvoc.txt",
 	
@@ -35,7 +35,7 @@
 	"cellSize": 40,
 	"binMinCapacity": 4,
 	"binMaxCapacity": 8,
-	"maxFeatures": 1200,
+	"maxFeatures": 900,
 
 	"// POINT CLUSTERING": "",
 	"clusterLength": 3.0,
@@ -45,7 +45,7 @@
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,
-	"movingObjectLabels": [ "Oats" ],
+	"movingObjectLabels": [ "Object" ],
 	
 	"// AR VIEW OBJECTS": "",
 	"cubes": [[ 0, -3, 16, 45, 0, 0, 2 ]],
@@ -58,6 +58,6 @@
 
 	"// GUI DEFAULT OPTIONS": "",
 	"ARView.showMapPoints": false,
-	"ARView.showBoundingBoxes": false
+	"ARView.showBoundingBoxes": true
 	
 }

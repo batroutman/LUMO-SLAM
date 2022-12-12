@@ -129,7 +129,7 @@ public class GUIComponents {
 
 	private long createWindow() {
 		long window = glfwCreateWindow(Parameters.<Integer>get("screenWidth"), Parameters.<Integer>get("screenHeight"),
-				"AR System 04", NULL, NULL);
+				"LUMO-SLAM Demo Container", NULL, NULL);
 		glfwShowWindow(window);
 		glfwSetWindowPos(window, 0, 30);
 		glfwMakeContextCurrent(window);
