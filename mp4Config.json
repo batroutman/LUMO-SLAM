@@ -35,7 +35,7 @@
 	"cellSize": 40,
 	"binMinCapacity": 4,
 	"binMaxCapacity": 8,
-	"maxFeatures": 900,
+	"maxFeatures": 1000,
 
 	"// POINT CLUSTERING": "",
 	"clusterLength": 3.0,

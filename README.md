@@ -2,10 +2,7 @@
 
 LUMO-SLAM is a markerless, monocular SLAM system that can also detect and localize moving objects without knowledge of the objects' appearance, structure, or existence.
 
-<!--
-change this link to be an mp4 of the above video
-https://user-images.githubusercontent.com/38326482/189950820-030fd9e4-406b-4d14-8171-43b134344223.mp4
--->
+https://files.blaketroutman.com/LUMO-SLAM_README_Demo_01.mp4
 
 ## Citing
 If you would like to cite this work, you can reference the following paper:

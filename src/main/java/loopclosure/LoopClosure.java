@@ -57,8 +57,8 @@ public class LoopClosure {
 		int KF_PADDING = 10;
 		int NUM_DEEP_CHECKS = 10;
 		double MIN_BOW_SCORE = 0.2;
-		int MATCH_THRESHOLD = 30;
-		int MIN_MATCHES_REQ = 70;
+		int MATCH_THRESHOLD = 20; // 30
+		int MIN_MATCHES_REQ = 50; // 70
 		int LOOP_DETECTION_PAUSE_AMOUNT = 30;
 
 		// find the next keyframe after the last one checked
