@@ -32,7 +32,7 @@ The libraries required by the system are specified below.
 
 ### lwjgl 3.2.3 - Lightweight Java Game Library
 - https://www.lwjgl.org/
-- lwjgl is a Java graphics library which, in this project, is used for its implementation of the OpenGL. 
+- lwjgl is a Java graphics library which, in this project, is used for its implementation of OpenGL. 
 - NOTE: ADD OTHER SYSTEM BINARIES TO GRADLE FILE FOR LWJGL
 
 ### Jama 1.0.2
