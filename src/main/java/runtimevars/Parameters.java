@@ -54,7 +54,7 @@ public final class Parameters {
 		parameters.put("cellSize", 40); // Integer
 		parameters.put("binMinCapacity", 4); // Integer
 		parameters.put("binMaxCapacity", 8); // Integer
-		parameters.put("maxFeatures", 1200); // Integer
+		parameters.put("maxFeatures", 900); // Integer
 
 		// -------- point clustering -------- //
 		parameters.put("clusterLength", 3.0); // Double

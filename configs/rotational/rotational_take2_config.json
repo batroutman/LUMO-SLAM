@@ -1,10 +1,6 @@
 {
 	"// INPUT DATA INFORMATION": "",
-	"-inputDataPath": "../customdata/initial/prepped_object_001.mp4",
-	"--inputDataPath": "../customdata/initial/book_003.mp4",
-	"---inputDataPath": "../customdata/initial/xbox_controller_001.mp4",
-	"----inputDataPath": "../customdata/initial/oats_002.mp4",
-    "inputDataPath": "../customdata/groundtruth/set3/take4/initial/phone_take4.mp4",
+    "inputDataPath": "../customdata/registration/rotational/take2.mp4",
 	"bufferType": "MP4",
 	"bowVocabFile": "../BoW/ORBvoc.txt",
 	
@@ -36,7 +32,7 @@
 	"cellSize": 40,
 	"binMinCapacity": 4,
 	"binMaxCapacity": 8,
-	"maxFeatures": 1000,
+	"maxFeatures": 900,
 
 	"// POINT CLUSTERING": "",
 	"clusterLength": 3.0,
@@ -46,11 +42,10 @@
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,
-	"movingObjectLabels": [ "Object" ],
+	"movingObjectLabels": [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
 	
 	"// AR VIEW OBJECTS": "",
 	"cubes": [[ 0, -3, 16, 45, 0, 0, 2 ]],
-	"cubes-stf": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]],
 	
 	"// MARKER OPTIONS FOR USER INPUT AND GROUND TRUTH DEMOS": "",
 	"usingMarkers": false,

@@ -1,0 +1,20 @@
+low_light registration results:
+
+    take0:      success
+    take1:      success
+    take2:      success
+    take3:      success
+    take4:      success
+    take5:      success
+    take6:      success
+    take7:      failure
+    take8:      success
+    take9:      failure
+    
+    notably, low light requires more generous feature extraction for camera localization consistency
+    
+    specifically:
+    
+    "binMinCapacity": 6,
+	"binMaxCapacity": 10,
+	"maxFeatures": 1200,

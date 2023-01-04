@@ -1,0 +1,3 @@
+Marker data close: gt_set3_take0.json
+Marker data medium: gt_set3_take1.json
+Marker data far: gt_set3_take4.json

@@ -1,0 +1,13 @@
+high_light registration results:
+
+    take0:      success 
+    take1:      success
+    take2:      success
+    take3:      success
+    take4:      success
+    take5:      success
+    take6:      success
+    take7:      success
+    take8:      success
+    take9:      success
+    
