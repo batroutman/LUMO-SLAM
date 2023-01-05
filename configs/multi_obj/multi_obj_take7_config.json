@@ -1,0 +1,59 @@
+{
+	"// INPUT DATA INFORMATION": "",
+    "inputDataPath": "../customdata/registration/multi_obj/take7.mp4",
+	"bufferType": "MP4",
+	"bowVocabFile": "../BoW/ORBvoc.txt",
+	
+	"// TRAJECTORY SAVE INFORMATION": "",
+	"trajectorySavePath": "trajectory1.txt",
+	"keyframeTrajectorySavePath": "kftrajectory1.txt",
+	
+	"// CAMERA INTRINSIC PARAMETERS": "",
+	"fx": 532.7207860168011,
+	"fy": 535.9170688067344,
+	"cx": 319.70552792335775,
+	"cy": 239.71821145550476,
+	"distCoeffs": [],
+
+	"// RESOLUTION INFORMATION": "",
+	"// width and height are the width and height of the input images/video": "",
+	"width": 640,
+	"height": 480,
+	"// screenWidth and screenHeight are the width and height of the display window": "",
+	"screenWidth": 1280,
+	"screenHeight": 960,
+
+	"// INITIALIZATION AND POINT TRIANGULATION": "",
+	"smartInitialization": false,
+	"parallaxRequirement": 2.0,
+	"initializationReprojectionError": 4.0,
+
+	"// FEATURE EXTRACTION": "",
+	"cellSize": 40,
+	"binMinCapacity": 4,
+	"binMaxCapacity": 8,
+	"maxFeatures": 800,
+
+	"// POINT CLUSTERING": "",
+	"clusterLength": 3.0,
+
+	"// PnP TRACKING": "",
+	"PnPRansacReprojectionThreshold": 7.0,
+
+	"// MOVING OBJECT REGISTRATION": "",
+	"maxRegistrationAttempts": 4,
+	"movingObjectLabels": [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+	
+	"// AR VIEW OBJECTS": "",
+	"cubes": [[ 0, -3, 16, 45, 0, 0, 2 ]],
+	
+	"// MARKER OPTIONS FOR USER INPUT AND GROUND TRUTH DEMOS": "",
+	"usingMarkers": false,
+	"markerMapFile": "map-0-37-0.csv",
+	"movingObjectMarkers": [],
+
+	"// GUI DEFAULT OPTIONS": "",
+	"ARView.showMapPoints": false,
+	"ARView.showBoundingBoxes": true
+	
+}

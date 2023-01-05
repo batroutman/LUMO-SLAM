@@ -1,0 +1,12 @@
+moving cam registration results:
+
+    take0:      failure
+    take1:      failure
+    take2:      success
+    take3:      success
+    take4:      failure
+    take5:      success
+    take6:      success
+    take7:      success
+    take8:      success
+    take9:      failure

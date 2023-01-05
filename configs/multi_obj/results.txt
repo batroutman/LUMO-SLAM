@@ -1,0 +1,12 @@
+mutli obj registration results:
+
+    take0:      success
+    take1:      success
+    take2:      first obj registered
+    take3:      success
+    take4:      first obj registered
+    take5:      failure
+    take6:      success
+    take7:      success
+    take8:      success
+    take9:      success

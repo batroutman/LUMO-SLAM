@@ -1,0 +1,12 @@
+fast motion registration results:
+
+    take0:      failure
+    take1:      failure
+    take2:      failure
+    take3:      failure
+    take4:      failure
+    take5:      failure
+    take6:      failure
+    take7:      failure
+    take8:      failure
+    take9:      failure
