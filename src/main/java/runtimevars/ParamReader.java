@@ -66,6 +66,11 @@ public class ParamReader {
 		this.setInteger(obj, "maxRegistrationAttempts");
 		this.setListString(obj, "movingObjectLabels");
 
+		this.setDouble(obj, "triangulationBaseline");
+
+		this.setInteger(obj, "LCMatchThreshold");
+		this.setInteger(obj, "LCMatchMin");
+
 		this.setListListFloat(obj, "cubes");
 
 		this.setBoolean(obj, "usingMarkers");

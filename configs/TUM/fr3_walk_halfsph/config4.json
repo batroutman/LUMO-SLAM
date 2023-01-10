@@ -1,0 +1,53 @@
+{
+	"// INPUT DATA INFORMATION": "",
+	"inputDataPath": "../datasets/rgbd_dataset_freiburg3_walking_halfsphere/",
+	"bufferType": "TUM",
+	"bowVocabFile": "../BoW/ORBvoc.txt",
+	
+	"// TRAJECTORY SAVE INFORMATION": "",
+	"trajectorySavePath": "../evaluation_tum/results/fr3_walk_halfsph/trajectory4.txt",
+	"keyframeTrajectorySavePath": "../evaluation_tum/results/fr3_walk_halfsph/kftrajectory4.txt",
+	
+	"// CAMERA INTRINSIC PARAMETERS": "",
+	"fx": 535.4,
+    "fy": 539.2,
+    "cx": 320.1,
+    "cy": 247.6,
+    "s": 0,
+    "distCoeffs": [],
+
+	"// RESOLUTION INFORMATION": "",
+	"// width and height are the width and height of the input images/video": "",
+	"width": 640,
+	"height": 480,
+	"// screenWidth and screenHeight are the width and height of the display window": "",
+	"screenWidth": 1280,
+	"screenHeight": 960,
+
+	"// POINT TRIANGULATION": "",
+	"smartInitialization": false,
+	"parallaxRequirement": 2.0,
+	"initializationReprojectionError": 4.0,
+
+	"// FEATURE EXTRACTION": "",
+	"cellSize": 40,
+	"binMinCapacity": 4,
+	"binMaxCapacity": 8,
+	"maxFeatures": 1200,
+
+	"// POINT CLUSTERING": "",
+	"clusterLength": 3.0,
+
+	"// PnP TRACKING": "",
+	"PnPRansacReprojectionThreshold": 7.0,
+
+    "// TRIANGULATION": "",
+    "triangulationBaseline": 2.0,
+
+	"// MOVING OBJECT REGISTRATION": "",
+	"maxRegistrationAttempts": 4,
+	
+	"// AR VIEW OBJECTS": "",
+	"cubes": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]]
+	
+}

@@ -77,6 +77,12 @@ public final class Parameters {
 		moLabels.add("Moving Object 9");
 		parameters.put("movingObjectLabels", moLabels); // List<String>
 
+		parameters.put("triangulationBaseline", 1.0); // Double
+
+		// -------- loop closure -------- //
+		parameters.put("LCMatchThreshold", 20);
+		parameters.put("LCMatchMin", 50);
+
 		// -------- cubes -------- //
 		List<List<Float>> cubes = new ArrayList<List<Float>>();
 		List<Float> cube0 = new ArrayList<Float>();

@@ -227,7 +227,7 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 						Utils.pl("\n\n\n\npoint inclusion time: " + (e - s) + "ms\n\n\n\n");
 
 						// if heavily violating motion model, assume error
-						if (this.map.getCurrentKeyframe().getFrameNum() - this.map.getLastLoopClosed() > 1
+						if (this.map.getCurrentKeyframe().getFrameNum() - this.map.getLastLoopClosedTime() > 2
 								&& Utils.poseDistance(pose, Utils.getPoseEstimate(this.lastRecordedPose,
 										this.latestPose, this.poseVelocity, this.frameNum)) > 10) {
 							Utils.pl("MOTION MODEL VIOLATED: "

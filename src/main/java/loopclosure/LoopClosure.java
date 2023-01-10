@@ -57,8 +57,8 @@ public class LoopClosure {
 		int KF_PADDING = 10;
 		int NUM_DEEP_CHECKS = 10;
 		double MIN_BOW_SCORE = 0.2;
-		int MATCH_THRESHOLD = 20; // 30
-		int MIN_MATCHES_REQ = 50; // 70
+		int MATCH_THRESHOLD = Parameters.<Integer>get("LCMatchThreshold"); // 30, 20
+		int MIN_MATCHES_REQ = Parameters.<Integer>get("LCMatchMin"); // 70, 50
 		int LOOP_DETECTION_PAUSE_AMOUNT = 30;
 
 		// find the next keyframe after the last one checked
@@ -262,8 +262,9 @@ public class LoopClosure {
 
 		// register the latest loop-closed keyframe in the map (so BA knows if it needs
 		// to cancel)
-		this.map.setLoopBeingClosed(false);
 		this.map.setLastLoopClosed(danglingKF.getFrameNum());
+		this.map.setLastLoopClosedTime(this.map.getCurrentKeyframe().getFrameNum());
+		this.map.setLoopBeingClosed(false);
 
 	}
 

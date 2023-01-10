@@ -581,6 +581,7 @@ public class Photogrammetry {
 //		Utils.pl("*******************************************************************");
 
 		float reprojError = 4f;
+		double BASELINE_REQUIREMENT = Parameters.<Double>get("triangulationBaseline");
 
 		// get point triangulations
 		List<Point3D> newPoints = new ArrayList<Point3D>();
@@ -600,7 +601,7 @@ public class Photogrammetry {
 			Keyframe oldestKeyframe = untriangulatedMapPoints.get(i).getObservations().get(0).getKeyframe();
 
 			// check distance between keyframe and currentPose. if too small, omit.
-			if (currentPose.getDistanceFrom(oldestKeyframe.getPose()) < 2) {
+			if (currentPose.getDistanceFrom(oldestKeyframe.getPose()) < BASELINE_REQUIREMENT) {
 				continue;
 			}
 

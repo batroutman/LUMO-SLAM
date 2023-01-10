@@ -63,6 +63,10 @@ public class Map {
 	// frame number of the last time a loop was closed
 	protected long lastLoopClosed = -1;
 
+	// frame number of the current keyframe when the last loop was closed (may be
+	// different from lastLoopClosed if loop closure takes a long time)
+	protected long lastLoopClosedTime = -1;
+
 	public Map() {
 
 		this.init();
@@ -575,6 +579,14 @@ public class Map {
 
 	public void setLastLoopClosed(long lastLoopClosed) {
 		this.lastLoopClosed = lastLoopClosed;
+	}
+
+	public long getLastLoopClosedTime() {
+		return lastLoopClosedTime;
+	}
+
+	public void setLastLoopClosedTime(long lastLoopClosedTime) {
+		this.lastLoopClosedTime = lastLoopClosedTime;
 	}
 
 }

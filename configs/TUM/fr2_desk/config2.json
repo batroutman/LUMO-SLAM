@@ -1,0 +1,57 @@
+{
+	"// INPUT DATA INFORMATION": "",
+	"inputDataPath": "../datasets/rgbd_dataset_freiburg2_desk/",
+	"bufferType": "TUM",
+	"bowVocabFile": "../BoW/ORBvoc.txt",
+	
+	"// TRAJECTORY SAVE INFORMATION": "",
+	"trajectorySavePath": "../evaluation_tum/results/fr2_desk/trajectory2.txt",
+	"keyframeTrajectorySavePath": "../evaluation_tum/results/fr2_desk/kftrajectory2.txt",
+	
+	"// CAMERA INTRINSIC PARAMETERS": "",
+	"fx": 520.9,
+    "fy": 521.0,
+    "cx": 325.1,
+    "cy": 249.7,
+    "s": 0,
+    "distCoeffs": [ 0.2312, -0.7849, -0.0033, -0.0001, 0.9172 ],
+
+	"// RESOLUTION INFORMATION": "",
+	"// width and height are the width and height of the input images/video": "",
+	"width": 640,
+	"height": 480,
+	"// screenWidth and screenHeight are the width and height of the display window": "",
+	"screenWidth": 1280,
+	"screenHeight": 960,
+
+	"// POINT TRIANGULATION": "",
+	"smartInitialization": false,
+	"parallaxRequirement": 2.0,
+	"initializationReprojectionError": 4.0,
+
+	"// FEATURE EXTRACTION": "",
+	"cellSize": 40,
+	"binMinCapacity": 4,
+	"binMaxCapacity": 8,
+	"maxFeatures": 700,
+
+	"// POINT CLUSTERING": "",
+	"clusterLength": 3.0,
+
+	"// PnP TRACKING": "",
+	"PnPRansacReprojectionThreshold": 7.0,
+
+    "// TRIANGULATION": "",
+    "triangulationBaseline": 2.0,
+
+	"// MOVING OBJECT REGISTRATION": "",
+	"maxRegistrationAttempts": 4,
+	
+    "// LOOP CLOSING": "",
+    "LCMatchThreshold": 30,
+    "LCMatchMin": 70,
+    
+	"// AR VIEW OBJECTS": "",
+	"cubes": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]]
+	
+}
