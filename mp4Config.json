@@ -1,10 +1,10 @@
 {
 	"// INPUT DATA INFORMATION": "",
-	"-inputDataPath": "../customdata/initial/prepped_object_001.mp4",
+	"inputDataPath": "../customdata/initial/prepped_object_001.mp4",
 	"--inputDataPath": "../customdata/initial/book_003.mp4",
 	"---inputDataPath": "../customdata/initial/xbox_controller_001.mp4",
 	"----inputDataPath": "../customdata/initial/oats_002.mp4",
-    "inputDataPath": "../customdata/groundtruth/set3/take4/initial/phone_take4.mp4",
+    "-----inputDataPath": "../customdata/groundtruth/set3/take4/initial/phone_take4.mp4",
 	"bufferType": "MP4",
 	"bowVocabFile": "../BoW/ORBvoc.txt",
 	

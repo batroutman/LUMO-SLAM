@@ -47,6 +47,9 @@
 	"// AR VIEW OBJECTS": "",
 	"cubes": [[ 0, -3, 16, 45, 0, 0, 2 ]],
 	
+    "// TRIANGULATION": "",
+    "triangulationBaseline": 2.0,
+
 	"// MARKER OPTIONS FOR USER INPUT AND GROUND TRUTH DEMOS": "",
 	"usingMarkers": false,
 	"markerMapFile": "map-0-37-0.csv",

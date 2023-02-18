@@ -43,6 +43,10 @@
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,
+    
+    "// LOOP CLOSING": "",
+    "LCMatchThreshold": 30,
+    "LCMatchMin": 70,
 	
 	"// AR VIEW OBJECTS": "",
 	"cubes": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]]

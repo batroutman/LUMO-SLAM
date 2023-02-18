@@ -1,14 +1,14 @@
 {
 	"// INPUT DATA INFORMATION": "",
-	"inputDataPath": "../customdata/groundtruth/set3/take0/phone_take0",
+	"inputDataPath": "../customdata/groundtruth/set1/take1/phone_take1",
 	"bufferType": "TUM",
 	
 	"// TRAJECTORY SAVE INFORMATION": "",
-	"trajectorySavePath": "../customdata/groundtruth/set3/take0/trajectory.txt",
-	"keyframeTrajectorySavePath": "../customdata/groundtruth/set3/take0/kftrajectory.txt",
-	"movingObjectTrajectoryPathJSON": "../customdata/groundtruth/set3/take0/moTrajectories.json",
-	"movingObjectTrajectoryPathTXT": "../customdata/groundtruth/set3/take0/moTrajectories",
-	"markerSimTransformPath": "../customdata/groundtruth/set3/take0/markerSimTransform.json",
+	"trajectorySavePath": "../customdata/groundtruth/set1/take1/trajectory.txt",
+	"keyframeTrajectorySavePath": "../customdata/groundtruth/set1/take1/kftrajectory.txt",
+	"movingObjectTrajectoryPathJSON": "../customdata/groundtruth/set1/take1/moTrajectories.json",
+	"movingObjectTrajectoryPathTXT": "../customdata/groundtruth/set1/take1/moTrajectories",
+	"markerSimTransformPath": "../customdata/groundtruth/set1/take1/markerSimTransform.json",
 	
 	"// CAMERA INTRINSIC PARAMETERS": "",
 	"fx": 532.7207860168011,
@@ -27,9 +27,15 @@
 
 	"// INITIALIZATION AND POINT TRIANGULATION": "",
 	"smartInitialization": false,
-    
+
     "// FEATURE EXTRACTION": "",
-    "maxFeatures": 1000,
+    "cellSize": 40,
+    "binMinCapacity": 4,
+    "binMaxCapacity": 8,
+    "maxFeatures": 1200,
+
+    "// TRIANGULATION": "",
+    "triangulationBaseline": 2.0,
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,
@@ -40,7 +46,7 @@
 	
 	"// MARKER OPTIONS FOR USER INPUT AND GROUND TRUTH DEMOS": "",
 	"usingMarkers": true,
-	"markerMapFile": "../customdata/groundtruth/set3/map-set3.csv",
+	"markerMapFile": "../customdata/groundtruth/set1/map-set1.csv",
 	"movingObjectMarkers": [[512, 513, 514, 515]],
 
 	

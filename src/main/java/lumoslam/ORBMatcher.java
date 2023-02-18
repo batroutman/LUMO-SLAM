@@ -14,6 +14,7 @@ import org.opencv.features2d.BFMatcher;
 import org.opencv.features2d.DescriptorMatcher;
 
 import lumoslam.Tracker.DescriptorInfo;
+import runtimevars.Parameters;
 import toolbox.Utils;
 import types.Correspondence2D2D;
 import types.Dbl;
@@ -276,8 +277,16 @@ public class ORBMatcher {
 			return;
 		}
 
+//		for (int i = 0; i < correspondences.size(); i++) {
+//			if (correspondences.get(i).getLength() > median.getValue() * 5) {
+//				correspondences.remove(i);
+//				matches.remove(i);
+//				i--;
+//			}
+//		}
+
 		for (int i = 0; i < correspondences.size(); i++) {
-			if (correspondences.get(i).getLength() > median.getValue() * 5) {
+			if (correspondences.get(i).getLength() > Parameters.<Integer>get("width") * 0.25) {
 				correspondences.remove(i);
 				matches.remove(i);
 				i--;

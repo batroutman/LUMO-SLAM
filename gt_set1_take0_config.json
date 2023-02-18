@@ -27,6 +27,15 @@
 
 	"// INITIALIZATION AND POINT TRIANGULATION": "",
 	"smartInitialization": false,
+    
+    "// FEATURE EXTRACTION": "",
+    "cellSize": 40,
+    "binMinCapacity": 4,
+    "binMaxCapacity": 8,
+    "maxFeatures": 1200,
+
+    "// TRIANGULATION": "",
+    "triangulationBaseline": 2.0,
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,

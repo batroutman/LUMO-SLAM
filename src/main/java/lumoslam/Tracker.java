@@ -1004,9 +1004,10 @@ public class Tracker {
 		}
 
 		// record points that were tracked and points that failed
-		for (MapPoint mp : mapPointsTracked.keySet()) {
+		for (DescriptorInfo di : descriptorInfos) {
+			MapPoint mp = di.projectionInfo.mapPoint;
 			Boolean tracked = mapPointsTracked.get(mp);
-			if (tracked) {
+			if (tracked != null) {
 				mp.incTimesTracked();
 			} else {
 				mp.incTimesLost();
@@ -1253,7 +1254,7 @@ public class Tracker {
 			points.add(new Point(keypointsList.get(match.trainIdx).pt.x, keypointsList.get(match.trainIdx).pt.y));
 		}
 
-		Matrix E = Photogrammetry.OpenCVPnP(point3s, points, new Mat(), new Mat(), outInlierIndices, false);
+		Matrix E = Photogrammetry.OpenCVPnP(point3s, points, new Mat(), new Mat(), outInlierIndices, true);
 		outPose.setPose(Utils.matrixToPose(E));
 		Utils.pl("inliers (after point inclusion): " + outInlierIndices.size());
 
