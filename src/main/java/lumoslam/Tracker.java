@@ -718,7 +718,7 @@ public class Tracker {
 			Dbl median = new Dbl(0);
 			Utils.basicStats(reprojErrors, avg, stdDev, median);
 
-			if (avg.getValue() > 4) {
+			if (median.getValue() > 4) {
 				continue;
 			}
 

@@ -2,10 +2,9 @@
 	"// INPUT DATA INFORMATION": "",
 	"-inputDataPath": "../customdata/initial/prepped_object_001.mp4",
 	"--inputDataPath": "../customdata/initial/book_003.mp4",
-	"---inputDataPath": "../customdata/initial/xbox_controller_001.mp4",
+	"inputDataPath": "../customdata/initial/xbox_controller_001.mp4",
 	"----inputDataPath": "../customdata/initial/oats_002.mp4",
     "-----inputDataPath": "../customdata/groundtruth/set3/take4/initial/phone_take4.mp4",
-    "inputDataPath": "../Defense/initial/ar_book_03.mp4",
 	"bufferType": "MP4",
 	"bowVocabFile": "../BoW/ORBvoc.txt",
 	
@@ -37,25 +36,24 @@
 	"cellSize": 40,
 	"binMinCapacity": 4,
 	"binMaxCapacity": 8,
-	"maxFeatures": 700,
+	"maxFeatures": 900,
 
 	"// POINT CLUSTERING": "",
 	"clusterLength": 3.0,
     
     "// LOOP CLOSURE": "",
-    "LCMatchThreshold": 30,
-    "LCMatchMin": 50,
+    "LCMatchThreshold": 35,
+    "LCMatchMin": 70,
 
 	"// PnP TRACKING": "",
 	"PnPRansacReprojectionThreshold": 7.0,
 
 	"// MOVING OBJECT REGISTRATION": "",
 	"maxRegistrationAttempts": 4,
-	"movingObjectLabels": [ "Object", "Object", "Object", "Object", "Object", "Object" ],
+	"movingObjectLabels": [ "Xbox controller" ],
 	
 	"// AR VIEW OBJECTS": "",
-    "-cubes": [],
-	"cubes": [[ -1, 0, 16, 45, 0, 0, 1 ]],
+	"cubes": [[ 0, -3, 17, 30, 0, 0, 1.5 ]],
 	"cubes-stf": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]],
 	
 	"// MARKER OPTIONS FOR USER INPUT AND GROUND TRUTH DEMOS": "",
@@ -65,6 +63,6 @@
 
 	"// GUI DEFAULT OPTIONS": "",
 	"ARView.showMapPoints": false,
-	"ARView.showBoundingBoxes": true
+	"ARView.showBoundingBoxes": false
 	
 }
