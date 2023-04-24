@@ -94,7 +94,7 @@ public class Tracker {
 		}
 	}
 
-	public void registerMovingObjects3(Pose pose, List<Correspondence2D2D> prunedCorrespondences,
+	public void registerMovingObjects(Pose pose, List<Correspondence2D2D> prunedCorrespondences,
 			List<MapPoint> prunedCorrespondenceMapPoints, List<Correspondence2D2D> outlierCorrespondences,
 			List<MapPoint> outlierCorrespondenceMapPoints) {
 
@@ -174,13 +174,6 @@ public class Tracker {
 			mo.calculateCentroid();
 		}
 
-//		long time = t.stop();
-//		if (movingObjects.size() > 0) {
-//			Utils.pl("\n\n\n\nMOVING OBJECT REGISTERED: " + time + "ms\n\n\n\n");
-//		} else {
-//			Utils.pl("\n\n\n\nMOVING OBJECT NOT REGISTERED: " + time + "ms\n\n\n\n");
-//		}
-
 	}
 
 	// return true if the collection of points fulfills constraints that indicate it
@@ -220,205 +213,6 @@ public class Tracker {
 			return false;
 		} else {
 			return true;
-		}
-
-	}
-
-	public void registerMovingObjects2(Pose pose, List<Correspondence2D2D> prunedCorrespondences,
-			List<MapPoint> prunedCorrespondenceMapPoints, List<Correspondence2D2D> outlierCorrespondences,
-			List<MapPoint> outlierCorrespondenceMapPoints) {
-
-		// determine window parameters
-		double binSize = (Parameters.<Integer>get("cellSize")).doubleValue();
-		int cellSearchRadius = 1;
-		int margin = 4;
-
-		// compress correspondences into matchedpoints
-		List<Correspondence2D2D> allCorrespondences = new ArrayList<Correspondence2D2D>();
-		List<MapPoint> allMapPoints = new ArrayList<MapPoint>();
-		allCorrespondences.addAll(prunedCorrespondences);
-		allMapPoints.addAll(prunedCorrespondenceMapPoints);
-		allCorrespondences.addAll(outlierCorrespondences);
-		allMapPoints.addAll(outlierCorrespondenceMapPoints);
-		List<MatchedPoint> matchedPoints = this.buildMatchedPoints(allCorrespondences, allMapPoints);
-
-		// load correspondences into hash table based on (x1, y1) position
-		HashMap<String, List<MatchedPoint>> pointTable = this.buildPointTable(matchedPoints, binSize);
-		HashMap<MatchedPoint, Boolean> potentiallyMoving = new HashMap<MatchedPoint, Boolean>();
-
-		// slide window across table - for each group of correspondences...
-		int numRows = (int) Math.ceil(Parameters.<Integer>get("height") / binSize);
-		int numCols = (int) Math.ceil(Parameters.<Integer>get("width") / binSize);
-		HashMap<String, Double> transChordals = new HashMap<String, Double>();
-		HashMap<String, Double> rotChordals = new HashMap<String, Double>();
-		for (int centerRow = margin; centerRow < numRows - margin; centerRow++) {
-			for (int centerCol = margin; centerCol < numCols - margin; centerCol++) {
-
-				transChordals.put(centerCol + "," + centerRow, 0.0);
-				rotChordals.put(centerCol + "," + centerRow, 0.0);
-
-				// cluster matchedPoints around this cell
-				List<MatchedPoint> window = new ArrayList<MatchedPoint>();
-				for (int row = centerRow - cellSearchRadius; row <= centerRow + cellSearchRadius; row++) {
-					if (row < 0 || row >= numRows) {
-						continue;
-					}
-					for (int col = centerCol - cellSearchRadius; col <= centerCol + cellSearchRadius; col++) {
-						if (col < 0 || col >= numCols) {
-							continue;
-						}
-
-						List<MatchedPoint> cell = pointTable.get(col + "," + row);
-						if (cell != null) {
-							window.addAll(cell);
-						}
-
-					}
-				}
-
-				if (window.size() < 6) {
-					continue;
-				}
-
-				// prep for PnP
-				List<Point3> point3s = new ArrayList<Point3>();
-				List<Point> points = new ArrayList<Point>();
-				List<Integer> inlierIndices = new ArrayList<Integer>();
-				this.spreadMatchedPointList(window, point3s, points);
-
-				// -- RANSAC PnP
-				Matrix poseMat = new Matrix(4, 4);
-				try {
-					poseMat = Photogrammetry.OpenCVPnP(point3s, points, new Mat(), new Mat(), inlierIndices, false);
-				} catch (Exception e) {
-					continue;
-				}
-
-				// -- -- if there is a valid result check difference with estimated pose
-				Matrix truePose = pose.getHomogeneousMatrix();
-				double rotChordal = poseMat.getMatrix(0, 2, 0, 2).minus(truePose.getMatrix(0, 2, 0, 2)).normF();
-				double transChordal = poseMat.getMatrix(0, 2, 3, 3).minus(truePose.getMatrix(0, 2, 3, 3)).normF();
-
-//				Utils.pl("rotChordal: " + rotChordal);
-//				Utils.pl("transChordal: " + transChordal);
-				transChordals.put(centerCol + "," + centerRow, transChordal);
-				rotChordals.put(centerCol + "," + centerRow, rotChordal);
-
-				// -- -- -- if pose difference is large, register moving object for inliers
-				if (rotChordal < 10 || transChordal < 10) {
-					continue;
-				}
-
-				// add inliers to potentiallyMoving table
-				for (Integer index : inlierIndices) {
-					potentiallyMoving.put(window.get(index), true);
-				}
-
-			}
-		}
-
-		double transChordalHigh = 0;
-		double rotChordalHigh = 0;
-		for (int centerCol = margin; centerCol < numCols - margin; centerCol++) {
-			for (int centerRow = margin; centerRow < numRows - margin; centerRow++) {
-				String key = centerCol + "," + centerRow;
-				double t = transChordals.get(key);
-				double r = rotChordals.get(key);
-				Utils.pl(String.format("transChordal[%s]: %.8f,        rotChordal[%s]: %.8f", key, t, key, r));
-				if (t > transChordalHigh) {
-					transChordalHigh = t;
-				}
-				if (r > rotChordalHigh) {
-					rotChordalHigh = r;
-				}
-			}
-		}
-
-		Utils.pl("\n\nHIGHEST TRANSLATION CHORDAL: " + transChordalHigh);
-		Utils.pl("HIGHEST ROTATION CHORDAL: " + rotChordalHigh);
-		Utils.pl("\n\n");
-
-		List<MatchedPoint> remainingPoints = new ArrayList<MatchedPoint>();
-		List<MovingModel> movingObjects = new ArrayList<MovingModel>();
-		List<MatchedPoint> potentiallyMovingList = new ArrayList<MatchedPoint>(potentiallyMoving.keySet());
-		this.deduceMovingObjects2(potentiallyMovingList, pose, remainingPoints, movingObjects);
-
-		Utils.pl("remainingPoints.size(): " + remainingPoints.size());
-		Utils.pl("movingObjects.size(): " + movingObjects.size());
-
-		this.map.registerMovingObjects(movingObjects);
-
-	}
-
-	public void deduceMovingObjects2(List<MatchedPoint> pointCorrespondences, Pose pose,
-			List<MatchedPoint> outRemainingPoints, List<MovingModel> movingObjects) {
-
-		outRemainingPoints.clear();
-		outRemainingPoints.addAll(pointCorrespondences);
-
-		movingObjects.clear();
-
-		// init input for PnP
-		List<Point3> point3s = new ArrayList<Point3>();
-		List<Point> points = new ArrayList<Point>();
-		List<Integer> inlierIndices = new ArrayList<Integer>();
-
-		for (MatchedPoint pc : pointCorrespondences) {
-			point3s.add(pc.point3);
-			points.add(pc.point);
-		}
-
-		// loop to create moving models
-		int MIN_POINTS = 6;
-		boolean keepGoing = point3s.size() >= MIN_POINTS;
-		while (keepGoing) {
-
-			// model transformation matrix
-			Matrix poseMat = new Matrix(4, 4);
-			try {
-				poseMat = Photogrammetry.OpenCVPnP(point3s, points, new Mat(), new Mat(), inlierIndices, false);
-			} catch (Exception e) {
-				keepGoing = false;
-				Utils.pl("Moving object registration broken on localization (PnP)");
-				continue;
-			}
-
-			// check if enough points in estimate
-			if (inlierIndices.size() < MIN_POINTS) {
-				keepGoing = false;
-				continue;
-			}
-
-			// there are enough inliers for a model, construct model
-			MovingModel mo = new MovingModel();
-			Transformation poseReverse = (new Transformation(pose)).getReverseTransformation();
-			mo.setTransformation(
-					new Transformation(Utils.matrixToPose(poseReverse.getHomogeneousMatrix().times(poseMat))));
-
-			// populate model with points
-			HashMap<Integer, Boolean> isInlier = new HashMap<Integer, Boolean>();
-			for (Integer idx : inlierIndices) {
-				isInlier.put(idx, true);
-			}
-
-			// add inliers to MO and remove them from lists
-			for (int i = outRemainingPoints.size() - 1; i >= 0; i--) {
-				if (isInlier.get(i) == null) {
-					continue;
-				}
-				mo.getMapPoints().add(outRemainingPoints.get(i).mapPoint);
-				outRemainingPoints.remove(i);
-				point3s.remove(i);
-				points.remove(i);
-			}
-
-			movingObjects.add(mo);
-
-			// if not enough outliers left, stop loop
-			if (outRemainingPoints.size() < MIN_POINTS) {
-				keepGoing = false;
-			}
-
 		}
 
 	}
@@ -471,150 +265,6 @@ public class Tracker {
 		int x = (int) (matchedPoint.correspondence.getX1() / binLength);
 		int y = (int) (matchedPoint.correspondence.getY1() / binLength);
 		return x + "," + y;
-	}
-
-	public void registerMovingObjects(Pose pose, List<Correspondence2D2D> prunedCorrespondences,
-			List<MapPoint> prunedCorrespondenceMapPoints, List<Correspondence2D2D> outlierCorrespondences,
-			List<MapPoint> outlierCorrespondenceMapPoints) {
-
-		// reformat and combine correspondence data
-		List<PointCorrespondence> prunedPCorr = new ArrayList<PointCorrespondence>();
-		List<PointCorrespondence> outlierPCorr = new ArrayList<PointCorrespondence>();
-		this.generatePointCorrespondences(prunedCorrespondences, prunedCorrespondenceMapPoints, false, prunedPCorr);
-		this.generatePointCorrespondences(outlierCorrespondences, outlierCorrespondenceMapPoints, true, outlierPCorr);
-		List<PointCorrespondence> allPCorr = new ArrayList<PointCorrespondence>();
-		allPCorr.addAll(prunedPCorr);
-		allPCorr.addAll(outlierPCorr);
-
-		// identify high reprojection error points
-		Matrix K = Parameters.getK();
-		Matrix E = pose.getHomogeneousMatrix().getMatrix(0, 2, 0, 3);
-		Matrix P = K.times(E);
-
-		// -- get all projections and projection errors
-		List<Double> projErrors = new ArrayList<Double>();
-		for (PointCorrespondence pc : allPCorr) {
-			Matrix proj = P.times(pc.point);
-			double w = proj.get(2, 0);
-			pc.projX = proj.get(0, 0) / w;
-			pc.projY = proj.get(1, 0) / w;
-			pc.reprojErr = Math.sqrt(Math.pow(pc.projX - pc.correspondence.getX1(), 2)
-					+ Math.pow(pc.projY - pc.correspondence.getY1(), 2));
-			projErrors.add(pc.reprojErr);
-		}
-
-		Dbl avg = new Dbl(0);
-		Dbl stdDev = new Dbl(0);
-		Dbl median = new Dbl(0);
-		Utils.basicStats(projErrors, avg, stdDev, median);
-
-		Utils.pl("avg: " + avg.getValue());
-		Utils.pl("median: " + median.getValue());
-		Utils.pl("avg / median: " + (avg.getValue() / median.getValue()));
-		Utils.pl("stdDev: " + stdDev.getValue());
-		Utils.pl("3 * stdDev: " + (3 * stdDev.getValue()));
-		Utils.pl("median + 3 * stdDev: " + (median.getValue() + 3 * stdDev.getValue()));
-
-//		String histogram = Utils.textHistogram(projErrors, 0.3, 120);
-//		Utils.pl("Histogram: ");
-//		Utils.pl(histogram);
-
-		// -- isolate points that have more than mean + x * stdDev reprojection error
-		List<PointCorrespondence> potentiallyMoving = new ArrayList<PointCorrespondence>();
-		if (avg.getValue() / median.getValue() > 50) {
-			for (PointCorrespondence pc : allPCorr) {
-				if (pc.reprojErr > avg.getValue()) {
-					potentiallyMoving.add(pc);
-				}
-			}
-		}
-
-		Utils.pl("\n\npotentiallyMoving.size(): " + potentiallyMoving.size() + "\n\n");
-
-		List<PointCorrespondence> remainingPoints = new ArrayList<PointCorrespondence>();
-		List<MovingModel> movingObjects = new ArrayList<MovingModel>();
-		this.deduceMovingObjects(potentiallyMoving, pose, remainingPoints, movingObjects);
-
-		Utils.pl("remainingPoints.size(): " + remainingPoints.size());
-		Utils.pl("movingObjects.size(): " + movingObjects.size());
-
-		this.map.registerMovingObjects(movingObjects);
-
-	}
-
-	public void deduceMovingObjects(List<PointCorrespondence> pointCorrespondences, Pose pose,
-			List<PointCorrespondence> outRemainingPoints, List<MovingModel> movingObjects) {
-
-		outRemainingPoints.clear();
-		outRemainingPoints.addAll(pointCorrespondences);
-
-		movingObjects.clear();
-
-		// init input for PnP
-		List<Point3> point3s = new ArrayList<Point3>();
-		List<Point> points = new ArrayList<Point>();
-		List<Integer> inlierIndices = new ArrayList<Integer>();
-
-		for (PointCorrespondence pc : pointCorrespondences) {
-			Point3 pt3 = new Point3(pc.point3D.getX(), pc.point3D.getY(), pc.point3D.getZ());
-			Point pt = new Point(pc.correspondence.getX1(), pc.correspondence.getY1());
-			point3s.add(pt3);
-			points.add(pt);
-		}
-
-		// loop to create moving models
-		int MIN_POINTS = 6;
-		boolean keepGoing = point3s.size() >= MIN_POINTS;
-		while (keepGoing) {
-
-			// model transformation matrix
-			Matrix poseMat = new Matrix(4, 4);
-			try {
-				poseMat = Photogrammetry.OpenCVPnP(point3s, points, new Mat(), new Mat(), inlierIndices, false);
-			} catch (Exception e) {
-				keepGoing = false;
-				Utils.pl("Moving object registration broken on localization (PnP)");
-				continue;
-			}
-
-			// check if enough points in estimate
-			if (inlierIndices.size() < MIN_POINTS) {
-				keepGoing = false;
-				continue;
-			}
-
-			// there are enough inliers for a model, construct model
-			MovingModel mo = new MovingModel();
-			Transformation poseReverse = (new Transformation(pose)).getReverseTransformation();
-			mo.setTransformation(
-					new Transformation(Utils.matrixToPose(poseReverse.getHomogeneousMatrix().times(poseMat))));
-
-			// populate model with points
-			HashMap<Integer, Boolean> isInlier = new HashMap<Integer, Boolean>();
-			for (Integer idx : inlierIndices) {
-				isInlier.put(idx, true);
-			}
-
-			// add inliers to MO and remove them from lists
-			for (int i = outRemainingPoints.size() - 1; i >= 0; i--) {
-				if (isInlier.get(i) == null) {
-					continue;
-				}
-				mo.getMapPoints().add(outRemainingPoints.get(i).mapPoint);
-				outRemainingPoints.remove(i);
-				point3s.remove(i);
-				points.remove(i);
-			}
-
-			movingObjects.add(mo);
-
-			// if not enough outliers left, stop loop
-			if (outRemainingPoints.size() < MIN_POINTS) {
-				keepGoing = false;
-			}
-
-		}
-
 	}
 
 	// find moving objects in frame and update their poses
@@ -680,9 +330,7 @@ public class Tracker {
 			try {
 				Mat rvec = new Mat();
 				Mat tvec = new Mat();
-//				if (mo.pose != null) {
-//					Utils.poseToRodrigues(pose, rvec, tvec);
-//				}
+
 				E = Photogrammetry.OpenCVPnP(p3s, p2s, rvec, tvec, inlierIndices, false, true);
 			} catch (Exception e) {
 //				e.printStackTrace();
@@ -699,11 +347,6 @@ public class Tracker {
 
 			boolean inFrontOfCamera = this.isInFrontOfCamera(pose, objectPose, mo);
 			double distFromCamera = objectPose.getDistanceFrom(pose);
-
-			// check if pose is far from camera
-//			if (distFromCamera > 100) {
-//				continue;
-//			}
 
 			// check if behind camera
 			if (!inFrontOfCamera) {

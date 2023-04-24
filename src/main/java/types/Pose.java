@@ -3,6 +3,12 @@ package types;
 import Jama.Matrix;
 import toolbox.Utils;
 
+// representation of a 3D geometric transformation, where the subject is first translated with (Cx, Cy, Cz),
+// and then rotated with unit quaternion (qw, qx, qy, qz)
+// the Pose class, however, represents this transformation for a camera. 
+// Thus, the parameters are logically reversed, as the pinhole camera model's "camera" is a transformation 
+// on all world points (if I could go back and remake this system, I would just use the Transformation class 
+// and omit the Pose class altogether).
 public class Pose {
 
 	long timestamp;

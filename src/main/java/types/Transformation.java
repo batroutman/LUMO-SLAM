@@ -3,6 +3,8 @@ package types;
 import Jama.Matrix;
 import toolbox.Utils;
 
+//representation of a 3D geometric transformation, where the subject is first translated with (Cx, Cy, Cz),
+//and then rotated with unit quaternion (qw, qx, qy, qz)
 public class Transformation {
 
 	double qw;

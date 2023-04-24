@@ -277,14 +277,6 @@ public class ORBMatcher {
 			return;
 		}
 
-//		for (int i = 0; i < correspondences.size(); i++) {
-//			if (correspondences.get(i).getLength() > median.getValue() * 5) {
-//				correspondences.remove(i);
-//				matches.remove(i);
-//				i--;
-//			}
-//		}
-
 		for (int i = 0; i < correspondences.size(); i++) {
 			if (correspondences.get(i).getLength() > Parameters.<Integer>get("width") * 0.25) {
 				correspondences.remove(i);

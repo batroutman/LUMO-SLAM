@@ -19,7 +19,6 @@ import arucomapping.ArUcoMap;
 import entities.Camera;
 import entities.Entity;
 import entities.LabelEntity;
-import gui.GUIComponents;
 import lumoslam.Keyframe;
 import lumoslam.MapPoint;
 import lumoslam.MovingModel;
@@ -112,7 +111,11 @@ public class Renderer {
 		for (MovingModel mo : movingObjects) {
 			MovingModel.BoundingBox bb = mo.getBoundingBox();
 			LabelEntity labelEntity = labelEntities.get(mo.getLabel());
-			this.renderLabelEntity(pose, camera, cameraShader, mo, labelEntity);
+
+			if (Parameters.<Boolean>get("ARView.showObjectLabels")) {
+				this.renderLabelEntity(pose, camera, cameraShader, mo, labelEntity);
+			}
+
 			if (Parameters.<Boolean>get("ARView.showBoundingBoxes")) {
 				this.renderBoundingBox(camera, colorShader, bb.x0, bb.x1, bb.y0, bb.y1, bb.z0, bb.z1, 1, 1, 1, 1);
 			}
@@ -245,7 +248,9 @@ public class Renderer {
 
 	public void renderProcessedView(Entity background, StaticShader bgShader, List<Correspondence2D2D> correspondences,
 			List<Correspondence2D2D> untriangulatedCorrespondences, List<Correspondence2D2D> initialCorrespondences,
-			List<KeyPoint> features, List<KeyPoint> trackedKeypoints, GUIComponents.FEATURE_DISPLAY displayType) {
+			List<KeyPoint> features, List<KeyPoint> trackedKeypoints) {
+
+		String featureDisplayType = Parameters.<String>get("GUI.featureDisplayType");
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_NEVER);
@@ -262,11 +267,11 @@ public class Renderer {
 		GL20.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
 		bgShader.stop();
-		if (displayType == GUIComponents.FEATURE_DISPLAY.BOXES) {
+		if (featureDisplayType.equalsIgnoreCase("BOXES")) {
 			this.renderFeatureBoxes(features);
-		} else if (displayType == GUIComponents.FEATURE_DISPLAY.POINTS) {
+		} else if (featureDisplayType.equalsIgnoreCase("POINTS")) {
 			this.renderFeaturePoints(features);
-		} else if (displayType == GUIComponents.FEATURE_DISPLAY.TRACKED_POINTS) {
+		} else if (featureDisplayType.equalsIgnoreCase("TRACKED_POINTS")) {
 			this.renderFeaturePoints(trackedKeypoints);
 		}
 
@@ -387,8 +392,10 @@ public class Renderer {
 	public void renderMapView(Camera mapCamera, StaticShader cameraShader,
 			HashMap<String, List<MapPoint>> mapPointsByCluster, List<MovingModel> movingObjects,
 			List<MapPoint> trackedMapPoints, List<Keyframe> keyframes, Pose mainPose, Keyframe currentKeyframe,
-			float pointSize, GUIComponents.COLOR_SCHEME colorScheme, ArUcoMap markerMap,
-			List<Keyframe> closestKeyframes, List<Keyframe> loopDetectedKeyframes) {
+			float pointSize, ArUcoMap markerMap, List<Keyframe> closestKeyframes,
+			List<Keyframe> loopDetectedKeyframes) {
+
+		String colorScheme = Parameters.<String>get("GUI.mapColorScheme");
 
 		for (String key : mapPointsByCluster.keySet()) {
 
@@ -401,7 +408,7 @@ public class Renderer {
 			}
 
 			Float[] color;
-			if (colorScheme == GUIComponents.COLOR_SCHEME.PARTITIONS) {
+			if (colorScheme.equalsIgnoreCase("PARTITIONS")) {
 				color = partitionColors.get(key);
 			} else {
 				color = blue;
@@ -441,7 +448,7 @@ public class Renderer {
 
 		this.renderMovingObjects(mapCamera, cameraShader, movingObjects, pointSize, 1, 0, 1);
 
-		if (colorScheme == GUIComponents.COLOR_SCHEME.TRACKED) {
+		if (colorScheme.equalsIgnoreCase("TRACKED")) {
 			Float[] color = red;
 			this.renderMapPoints(mapCamera, cameraShader, trackedMapPoints, pointSize, color[0], color[1], color[2]);
 		}

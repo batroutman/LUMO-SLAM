@@ -63,8 +63,30 @@
 	"markerMapFile": "map-0-37-0.csv",
 	"movingObjectMarkers": [],
 
-	"// GUI DEFAULT OPTIONS": "",
+	"// GUI DEFAULT SETTINGS": "",
 	"ARView.showMapPoints": false,
-	"ARView.showBoundingBoxes": true
+	"ARView.showBoundingBoxes": true,
+    "ARView.showObjectLabels": true,
+    
+    "// GUI view": "< 'ALL' | 'AR' | 'PROCESSED' | 'MAP' >",
+    "GUI.view": "ALL",
+    
+    "// Feature Display Type": "< 'BOXES' | 'POINTS' | 'TRACKED_POINTS' | 'NONE' >",
+    "GUI.featureDisplayType": "POINTS",
+    
+    "// Map Color Scheme": "< 'DEFAULT' | 'TRACKED' | 'PARTITIONS' >",
+    "GUI.mapColorScheme": "PARTITIONS",
+    
+    "MapView.followCamera": true,
+    
+    "// Camera transformation from initial view": "[cx, cy, cz, rx, ry, rz]",
+    
+    "// Use this one for a normal follow-camera view": "",
+    "MapView.cameraOffset": [0.0, -3.0, -10.0, 0.157, 0.0, 0.0],
+    
+    "// Use this one for a good top-down view": "(remove the '-' at the beginning)",
+    "-MapView.cameraOffset": [0.0, -50.0, 20, 1.57, 0.0, 0.0],
+    
+    "// end": ""
 	
 }

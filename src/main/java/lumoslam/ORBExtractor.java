@@ -271,25 +271,6 @@ public class ORBExtractor {
 
 	}
 
-	// given a sorted list of features (descending), remove weak features that are
-	// too close to others
-	public void preSortedNMS(List<KeyPoint> sortedFeatures) {
-
-		double NON_MAX_SUPPRESSION_THRESHOLD = 2;
-
-		for (int i = 0; i < sortedFeatures.size() - 1; i++) {
-			KeyPoint kp1 = sortedFeatures.get(i);
-			for (int j = i + 1; j < sortedFeatures.size(); j++) {
-				KeyPoint kp2 = sortedFeatures.get(j);
-				double dist = Math.sqrt(Math.pow(kp1.pt.x - kp2.pt.x, 2) + Math.pow(kp1.pt.y - kp2.pt.y, 2));
-				if (dist < NON_MAX_SUPPRESSION_THRESHOLD) {
-					sortedFeatures.remove(j);
-					j--;
-				}
-			}
-		}
-	}
-
 	public void setAngles(List<KeyPoint> filteredFeatures, List<Mat> pyramid, int patchSize) {
 
 		// create lists from pyramid
@@ -363,12 +344,6 @@ public class ORBExtractor {
 				for (int u = -d; u <= d; ++u) {
 					int x = centerX + u;
 					int y = centerY + v;
-
-//					int val_plus = x < 0 || y < 0 || x >= width || y >= height ? 0
-//							: Byte.toUnsignedInt(imgBuffer[rowMajor(x, y, width)]);
-//					y = centerY - v;
-//					int val_minus = x < 0 || y < 0 || x >= width || y >= height ? 0
-//							: Byte.toUnsignedInt(imgBuffer[rowMajor(x, y, width)]);
 
 					int val_plus = Byte.toUnsignedInt(imgBuffer[rowMajor(x, y, width)]);
 					y = centerY - v;

@@ -53,25 +53,13 @@ public class GUIComponents {
 	private long lastUpdate = 0;
 	private int updateInterval = 250;
 
-	public static enum VIEW {
-		AR, PROCESSED, MAP, ALL
-	};
+//	public static enum COLOR_SCHEME {
+//		DEFAULT, PARTITIONS, TRACKED
+//	};
 
-	VIEW view = VIEW.ALL;
+//	COLOR_SCHEME mapColor = COLOR_SCHEME.DEFAULT;
 
-	public static enum FEATURE_DISPLAY {
-		BOXES, POINTS, TRACKED_POINTS, NONE
-	};
-
-	public static enum COLOR_SCHEME {
-		DEFAULT, PARTITIONS, TRACKED
-	};
-
-	FEATURE_DISPLAY featureDisplayType = FEATURE_DISPLAY.POINTS;
-
-	COLOR_SCHEME mapColor = COLOR_SCHEME.DEFAULT;
-
-	private Widget mainWidget = new Widget(20, 20, 400, 400);
+	private Widget mainWidget = new Widget(20, 20, 450, 400);
 
 	private HashMap<String, Component> components = new HashMap<String, Component>();
 	private HashMap<String, String> prefixes = new HashMap<String, String>();
@@ -191,6 +179,20 @@ public class GUIComponents {
 								((CheckBox) components.get("showMapPointsBox")).isChecked());
 					}
 				});
+		this.addCheckbox("showBoundingBoxesBox", "Show Object Bounding Boxes",
+				Parameters.<Boolean>get("ARView.showBoundingBoxes"), new Callback<MouseClickEvent>() {
+					public void callback(MouseClickEvent event) {
+						Parameters.put("ARView.showBoundingBoxes",
+								((CheckBox) components.get("showBoundingBoxesBox")).isChecked());
+					}
+				});
+		this.addCheckbox("showObjectLabelsBox", "Show Object Labels",
+				Parameters.<Boolean>get("ARView.showObjectLabels"), new Callback<MouseClickEvent>() {
+					public void callback(MouseClickEvent event) {
+						Parameters.put("ARView.showObjectLabels",
+								((CheckBox) components.get("showObjectLabelsBox")).isChecked());
+					}
+				});
 
 		this.initLabelText();
 
@@ -223,6 +225,8 @@ public class GUIComponents {
 		col1.add("numMovingLabel");
 		col1.add("arViewOptionsLabel");
 		col1.add("showMapPointsBox");
+		col1.add("showBoundingBoxesBox");
+		col1.add("showObjectLabelsBox");
 
 		List<List<String>> order = new ArrayList<List<String>>();
 		order.add(col0);
@@ -248,26 +252,34 @@ public class GUIComponents {
 
 		for (int i = 0; i < this.componentOrder.size(); i++) {
 			for (int j = 0; j < this.componentOrder.get(i).size(); j++) {
-				this.components.get(this.componentOrder.get(i).get(j)).setPosition(i * 150 + 10, 20 * j + 10);
+				this.components.get(this.componentOrder.get(i).get(j)).setPosition(i * 200 + 10, 20 * j + 10);
 			}
 		}
 
-		((RadioButton) this.components.get("arViewButton")).setChecked(this.view == VIEW.AR);
-		((RadioButton) this.components.get("processedViewButton")).setChecked(this.view == VIEW.PROCESSED);
-		((RadioButton) this.components.get("mapViewButton")).setChecked(this.view == VIEW.MAP);
-		((RadioButton) this.components.get("allViewButton")).setChecked(this.view == VIEW.ALL);
+		((RadioButton) this.components.get("arViewButton"))
+				.setChecked(Parameters.<String>get("GUI.view").equalsIgnoreCase("AR"));
+		((RadioButton) this.components.get("processedViewButton"))
+				.setChecked(Parameters.<String>get("GUI.view").equalsIgnoreCase("PROCESSED"));
+		((RadioButton) this.components.get("mapViewButton"))
+				.setChecked(Parameters.<String>get("GUI.view").equalsIgnoreCase("MAP"));
+		((RadioButton) this.components.get("allViewButton"))
+				.setChecked(Parameters.<String>get("GUI.view").equalsIgnoreCase("ALL"));
 
-		((RadioButton) this.components.get("boxesButton")).setChecked(this.featureDisplayType == FEATURE_DISPLAY.BOXES);
+		((RadioButton) this.components.get("boxesButton"))
+				.setChecked(Parameters.<String>get("GUI.featureDisplayType").equalsIgnoreCase("BOXES"));
 		((RadioButton) this.components.get("pointsButton"))
-				.setChecked(this.featureDisplayType == FEATURE_DISPLAY.POINTS);
+				.setChecked(Parameters.<String>get("GUI.featureDisplayType").equalsIgnoreCase("POINTS"));
 		((RadioButton) this.components.get("trackedKeypointsButton"))
-				.setChecked(this.featureDisplayType == FEATURE_DISPLAY.TRACKED_POINTS);
-		((RadioButton) this.components.get("noneButton")).setChecked(this.featureDisplayType == FEATURE_DISPLAY.NONE);
+				.setChecked(Parameters.<String>get("GUI.featureDisplayType").equalsIgnoreCase("TRACKED_POINTS"));
+		((RadioButton) this.components.get("noneButton"))
+				.setChecked(Parameters.<String>get("GUI.featureDisplayType").equalsIgnoreCase("NONE"));
 
-		((RadioButton) this.components.get("mapColorDefaultButton")).setChecked(this.mapColor == COLOR_SCHEME.DEFAULT);
-		((RadioButton) this.components.get("mapColorTrackedButton")).setChecked(this.mapColor == COLOR_SCHEME.TRACKED);
+		((RadioButton) this.components.get("mapColorDefaultButton"))
+				.setChecked(Parameters.<String>get("GUI.mapColorScheme").equalsIgnoreCase("DEFAULT"));
+		((RadioButton) this.components.get("mapColorTrackedButton"))
+				.setChecked(Parameters.<String>get("GUI.mapColorScheme").equalsIgnoreCase("TRACKED"));
 		((RadioButton) this.components.get("mapColorPartitionsButton"))
-				.setChecked(this.mapColor == COLOR_SCHEME.PARTITIONS);
+				.setChecked(Parameters.<String>get("GUI.mapColorScheme").equalsIgnoreCase("PARTITIONS"));
 
 		// Set background color for frame
 		frame.getContainer().getStyle().getBackground().setColor(ColorConstants.transparent());
@@ -342,37 +354,37 @@ public class GUIComponents {
 	public void updateView() {
 		RadioButton selection = this.radioGroups.get("viewButtonGroup").getSelection();
 		if (selection == this.components.get("arViewButton")) {
-			this.view = VIEW.AR;
+			Parameters.put("GUI.view", "AR");
 		} else if (selection == this.components.get("processedViewButton")) {
-			this.view = VIEW.PROCESSED;
+			Parameters.put("GUI.view", "PROCESSED");
 		} else if (selection == this.components.get("mapViewButton")) {
-			this.view = VIEW.MAP;
+			Parameters.put("GUI.view", "MAP");
 		} else if (selection == this.components.get("allViewButton")) {
-			this.view = VIEW.ALL;
+			Parameters.put("GUI.view", "ALL");
 		}
 	}
 
 	public void updateFeatureDisplay() {
 		RadioButton selection = this.radioGroups.get("featureDisplayButtonGroup").getSelection();
 		if (selection == this.components.get("boxesButton")) {
-			this.featureDisplayType = FEATURE_DISPLAY.BOXES;
+			Parameters.put("GUI.featureDisplayType", "BOXES");
 		} else if (selection == this.components.get("pointsButton")) {
-			this.featureDisplayType = FEATURE_DISPLAY.POINTS;
+			Parameters.put("GUI.featureDisplayType", "POINTS");
 		} else if (selection == this.components.get("trackedKeypointsButton")) {
-			this.featureDisplayType = FEATURE_DISPLAY.TRACKED_POINTS;
+			Parameters.put("GUI.featureDisplayType", "TRACKED_POINTS");
 		} else if (selection == this.components.get("noneButton")) {
-			this.featureDisplayType = FEATURE_DISPLAY.NONE;
+			Parameters.put("GUI.featureDisplayType", "NONE");
 		}
 	}
 
 	public void updateMapColor() {
 		RadioButton selection = this.radioGroups.get("mapColorButtonGroup").getSelection();
 		if (selection == this.components.get("mapColorDefaultButton")) {
-			this.mapColor = COLOR_SCHEME.DEFAULT;
+			Parameters.put("GUI.mapColorScheme", "DEAFULT");
 		} else if (selection == this.components.get("mapColorTrackedButton")) {
-			this.mapColor = COLOR_SCHEME.TRACKED;
+			Parameters.put("GUI.mapColorScheme", "TRACKED");
 		} else if (selection == this.components.get("mapColorPartitionsButton")) {
-			this.mapColor = COLOR_SCHEME.PARTITIONS;
+			Parameters.put("GUI.mapColorScheme", "PARTITIONS");
 		}
 	}
 
@@ -437,22 +449,6 @@ public class GUIComponents {
 
 	public void setMainWidget(Widget mainWidget) {
 		this.mainWidget = mainWidget;
-	}
-
-	public VIEW getView() {
-		return this.view;
-	}
-
-	public FEATURE_DISPLAY getFeatureDisplayType() {
-		return featureDisplayType;
-	}
-
-	public COLOR_SCHEME getMapColor() {
-		return mapColor;
-	}
-
-	public void setMapColor(COLOR_SCHEME mapColor) {
-		this.mapColor = mapColor;
 	}
 
 }

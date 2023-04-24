@@ -406,11 +406,8 @@ public class Map {
 		if (cluster == null) {
 			return;
 		}
-//			Utils.pl("Before removing, num of map points with associated object: " + this.mapPointsByPartition.get(key)
-//					.stream().filter(m -> m.getAssociatedObject() != null).collect(Collectors.toList()).size());
+
 		boolean containedMapPoint = cluster.remove(mp);
-//			Utils.pl("After removing, num of map points with associated object: " + this.mapPointsByPartition.get(key)
-//					.stream().filter(m -> m.getAssociatedObject() != null).collect(Collectors.toList()).size());
 
 	}
 
@@ -425,8 +422,6 @@ public class Map {
 	// copy information from secondayMapPoint into primaryMapPoint and update
 	// references of secondaryMapPoint to point to primaryMapPoint
 	public synchronized void mergeMapPoint(MapPoint primaryMapPoint, MapPoint secondaryMapPoint) {
-
-//		Utils.pl("primary: " + primaryMapPoint + "\t\tsecondary: " + secondaryMapPoint);
 
 		// remove secondary map point from map
 		this.getAllMapPoints().remove(secondaryMapPoint);

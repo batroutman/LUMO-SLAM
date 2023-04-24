@@ -79,6 +79,14 @@ public class ParamReader {
 
 		this.setBoolean(obj, "ARView.showMapPoints");
 		this.setBoolean(obj, "ARView.showBoundingBoxes");
+		this.setBoolean(obj, "ARView.showObjectLabels");
+
+		this.setString(obj, "GUI.view");
+		this.setString(obj, "GUI.featureDisplayType");
+		this.setString(obj, "GUI.mapColorScheme");
+
+		this.setBoolean(obj, "MapView.followCamera");
+		this.setListDouble(obj, "MapView.cameraOffset");
 
 	}
 

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.opencv.core.KeyPoint;
-import org.opencv.core.Mat;
 
 import arucomapping.ArUcoKeypoint;
 import arucomapping.MarkerMPCorrespondence;
@@ -14,7 +13,6 @@ import buffers.Buffer;
 import buffers.QueuedBuffer;
 import buffers.SingletonBuffer;
 import mock.MockEnvironment;
-import placerecognition.BoWVector;
 import runtimevars.Parameters;
 import toolbox.Timer;
 import toolbox.Utils;
@@ -31,7 +29,6 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 
 	long targetFrametime = 30;
 	int frameNum = 0;
-//	MockPointData mock = new MockPointData();
 	MockEnvironment mock = new MockEnvironment();
 
 	Map map = new Map();
@@ -122,18 +119,6 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 
 			PipelineOutput po = new PipelineOutput();
 
-//			// mock
-//			if (this.mock.totalFrames <= this.frameNum) {
-//				keepGoing = false;
-//				this.mapOptimizer.threadGroup.interrupt();
-//				continue;
-//			}
-//
-//			// mock - processing the image and extracting features
-//			List<Byte> imageBufferGrey = new ArrayList<Byte>();
-//			List<Byte> imageBufferRGB = new ArrayList<Byte>();
-//			ImageData processedImage = this.mock.getImageData(this.frameNum, imageBufferGrey, imageBufferRGB);
-
 			// real data
 			// get the next frame
 			FramePack currentFrame = this.inputBuffer.getNext();
@@ -206,7 +191,7 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 								inlierRate, numTracked);
 
 						// register moving objects
-						tracker.registerMovingObjects3(pose, prunedCorrespondences, prunedCorrespondenceMapPoints,
+						tracker.registerMovingObjects(pose, prunedCorrespondences, prunedCorrespondenceMapPoints,
 								outlierCorrespondences, outlierCorrespondenceMapPoints);
 
 						// detect and localize moving objects
@@ -266,10 +251,6 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 							throw new TrackingException();
 						}
 
-//						Utils.pl("Pair BA: ");
-//						this.mapOptimizer.pairBundleAdjustment(pose, this.map.getCurrentKeyframe().getPose(),
-//								prunedCorrespondenceMapPoints, prunedCorrespondences, 10);
-
 						// triangulate untriangulated points
 						if (untriangulatedCorrespondences.size() > 0) {
 
@@ -318,38 +299,6 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 						}
 
 					}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-					// TEMP: Identify best keyframes from BoW vector
-					BoWVector vector = new BoWVector();
-					Mat bestDescriptors = BoWVector.getBestDescriptors(processedImage.getKeypoints(),
-							processedImage.getDescriptors(), 0.5);
-					vector.compute(bestDescriptors);
-
-					class KeyframeScore {
-						public Keyframe keyframe;
-						public double score;
-					}
-
-					List<KeyframeScore> KFScores = new ArrayList<KeyframeScore>();
-					for (int i = 0; i < this.map.getKeyframes().size(); i++) {
-						Keyframe kf = this.map.getKeyframes().get(i);
-						KeyframeScore kfScore = new KeyframeScore();
-						kfScore.keyframe = kf;
-						kfScore.score = vector.getScore(kf.getBowVector());
-						KFScores.add(kfScore);
-					}
-
-//				List<Keyframe> closestKFs = KFScores.stream().filter(kfs -> kfs.score >= 0.25).map(kfs -> kfs.keyframe)
-//						.collect(Collectors.toList());
-//				List<Keyframe> closestKFs = KFScores.stream().sorted(new Comparator<KeyframeScore>() {
-//					public int compare(KeyframeScore kfs1, KeyframeScore kfs2) {
-//						return kfs1.score - kfs2.score < 0 ? 1 : -1;
-//					}
-//				}).map(kfs -> kfs.keyframe).collect(Collectors.toList()).subList(0, 10);
-					List<Keyframe> closestKFs = new ArrayList<Keyframe>();
-
-					po.closestKeyframes = closestKFs;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 					// set pipeline output
 					po.pose = pose;
@@ -375,20 +324,12 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 			po.frameNum = this.frameNum++;
 			po.frameTitle = currentFrame.getFrameTitle();
 
-			// image data
-//			// mock
-//			po.rawFrameBuffer = Utils.byteArray(imageBufferRGB);
-//			po.processedFrameBuffer = Utils.byteArray(imageBufferGrey);
 			// real data
 			po.rawFrameBuffer = currentFrame.getRawFrameBuffer();
 			po.processedFrameBuffer = processedImage.getBuffer();
 			po.cameras = this.map.getCameras();
 			po.points = this.map.getAllPoints();
 			po.keyframes = this.map.getKeyframes();
-//			if (this.map.getCurrentKeyframe() != null && this.map.getCurrentKeyframe().getPreviousKeyframe() != null) {
-//				po.numKeyframes = (int) (this.map.getCurrentKeyframe().getFrameNum()
-//						- this.map.getCurrentKeyframe().getPreviousKeyframe().getFrameNum());
-//			}
 			po.numKeyframes = this.map.getKeyframes().size();
 			po.currentKeyframe = this.map.getCurrentKeyframe();
 
@@ -414,9 +355,6 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 
 			try {
 				long sleepTime = (end - start) < this.targetFrametime ? this.targetFrametime - (end - start) : 0;
-//				if (this.frameNum > 590) {
-//					sleepTime = 500;
-//				}
 				Thread.sleep(sleepTime);
 			} catch (Exception e) {
 			}

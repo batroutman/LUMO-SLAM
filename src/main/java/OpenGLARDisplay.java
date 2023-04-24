@@ -1,5 +1,4 @@
 
-import static java.awt.Font.BOLD;
 import static java.awt.Font.MONOSPACED;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 
@@ -94,21 +93,17 @@ public class OpenGLARDisplay {
 
 	public void initOpenGL() {
 
-		// init map transformation
-		this.mapTransformation.setCz(-10);
-		this.mapTransformation.setCy(-3);
-		this.mapTransformation.rotateEuler(0.157, 0, 0); // 0.157 ~ PI / 20
+		List<Double> cameraOffset = Parameters.<List<Double>>get("MapView.cameraOffset");
 
-		// top-down
-//		this.mapTransformation.setCy(-50);
-//		this.mapTransformation.setCz(20);
-//		this.mapTransformation.rotateEuler(Math.PI / 2, 0, 0); // 0.157 ~ PI / 20
+		this.mapTransformation.setCx(cameraOffset.get(0));
+		this.mapTransformation.setCy(cameraOffset.get(1));
+		this.mapTransformation.setCz(cameraOffset.get(2));
+		this.mapTransformation.rotateEuler(cameraOffset.get(3), cameraOffset.get(4), cameraOffset.get(5));
 
 		// initialize
 		this.gui.initGUI();
 		this.inputHandler.setWindow(this.gui.window);
 
-//		this.loader = new Loader();
 		this.cameraShader = new StaticShader(StaticShader.VERTEX_FILE, StaticShader.FRAGMENT_FILE);
 		this.colorShader = new StaticShader(StaticShader.VERTEX_FILE, StaticShader.COLOR_FRAGMENT_FILE);
 		StaticShader[] shaders = { this.cameraShader, this.colorShader };
@@ -128,20 +123,6 @@ public class OpenGLARDisplay {
 				-0.5f, -0.5f, 1, -0.5f, -0.5f, 0, 0.5f, -0.5f, 0, 0.5f, -0.5f, 1
 
 		};
-
-//		float[] textureCoords = {
-//
-//				0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
-//				1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
-//
-//		};
-
-//		float[] textureCoords = {
-//
-//				1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1,
-//				1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0
-//
-//		};
 
 		float[] textureCoords = { 0.25f, 0f, 0.25f, 0.25f, 0.5f, 0.25f, 0.5f, 0, 0.25f, 0.25f, 0.25f, 0.5f, 0.5f, 0.5f,
 				0.5f, 0.25f, 0.25f, 0.5f, 0.25f, 0.75f, 0.5f, 0.75f, 0.5f, 0.5f, 0.25f, 0.75f, 0.25f, 1f, 0.5f, 1f,
@@ -164,14 +145,8 @@ public class OpenGLARDisplay {
 					cube.get(4), cube.get(5), cube.get(6)));
 		}
 
-		// test label
-		Font font = new Font(new java.awt.Font(MONOSPACED, BOLD, 128));
-//		this.entities.add(new LabelEntity("test label\ntest label\nHELLO", font, new Vector3f(-3, 0, 12), 0, 0, 0, 1));
-
 		// create labels
 		this.labelEntities = this.getLabelEntityTable();
-
-//		this.entities.addAll(this.labelEntities.values());
 
 		// create camera
 		this.camera = new Camera();
@@ -225,30 +200,29 @@ public class OpenGLARDisplay {
 		context.updateGlfwWindow();
 		this.renderer.prepare();
 
-		if (this.gui.getView() == GUIComponents.VIEW.AR) {
+		if (Parameters.<String>get("GUI.view").equalsIgnoreCase("AR")) {
 
 			GL11.glViewport(0, 0, screenWidth, screenHeight);
 			this.renderer.render(this.pose, this.camera, this.entities, this.labelEntities, this.cameraShader,
 					this.colorShader, this.rawFrameEntity, this.bgShader, this.movingObjects,
 					this.map.getAllMapPoints());
 
-		} else if (this.gui.getView() == GUIComponents.VIEW.PROCESSED) {
+		} else if (Parameters.<String>get("GUI.view").equalsIgnoreCase("PROCESSED")) {
 
 			GL11.glViewport(0, 0, screenWidth, screenHeight);
 			this.renderer.renderProcessedView(this.processedFrameEntity, this.bgShader, this.prunedCorrespondences,
-					this.untriangulatedCorrespondences, this.correspondences, this.features, this.trackedKeypoints,
-					this.gui.getFeatureDisplayType());
+					this.untriangulatedCorrespondences, this.correspondences, this.features, this.trackedKeypoints);
 
-		} else if (this.gui.getView() == GUIComponents.VIEW.MAP) {
+		} else if (Parameters.<String>get("GUI.view").equalsIgnoreCase("MAP")) {
 
 			GL11.glViewport(0, 0, screenWidth, screenHeight);
 			synchronized (this.map) {
 				this.renderer.renderMapView(this.mapCamera, this.colorShader, this.mapPointsByPartition,
 						this.movingObjects, this.trackedMapPoints, this.keyframes, this.pose, this.currentKeyframe, 3,
-						this.gui.getMapColor(), this.markerMap, this.closestKeyframes, this.loopDetectedKeyframes);
+						this.markerMap, this.closestKeyframes, this.loopDetectedKeyframes);
 			}
 
-		} else if (this.gui.getView() == GUIComponents.VIEW.ALL) {
+		} else if (Parameters.<String>get("GUI.view").equalsIgnoreCase("ALL")) {
 
 			synchronized (this.map) {
 				GL11.glViewport(0, 0, screenWidth / 2, screenHeight / 2);
@@ -257,12 +231,11 @@ public class OpenGLARDisplay {
 						this.map.getAllMapPoints());
 				GL11.glViewport(screenWidth / 2, 0, screenWidth / 2, screenHeight / 2);
 				this.renderer.renderProcessedView(this.processedFrameEntity, this.bgShader, this.prunedCorrespondences,
-						this.untriangulatedCorrespondences, this.correspondences, this.features, this.trackedKeypoints,
-						this.gui.getFeatureDisplayType());
+						this.untriangulatedCorrespondences, this.correspondences, this.features, this.trackedKeypoints);
 				GL11.glViewport(screenWidth / 2, screenHeight / 2, screenWidth / 2, screenHeight / 2);
 				this.renderer.renderMapView(this.mapCamera, this.colorShader, this.mapPointsByPartition,
 						this.movingObjects, this.trackedMapPoints, this.keyframes, this.pose, this.currentKeyframe, 2,
-						this.gui.getMapColor(), this.markerMap, this.closestKeyframes, this.loopDetectedKeyframes);
+						this.markerMap, this.closestKeyframes, this.loopDetectedKeyframes);
 			}
 
 		}
@@ -302,11 +275,17 @@ public class OpenGLARDisplay {
 	public void setCameraPose(Pose pose) {
 		this.camera.setMatrix(pose.getR00(), pose.getR01(), pose.getR02(), pose.getR10(), pose.getR11(), pose.getR12(),
 				pose.getR20(), pose.getR21(), pose.getR22(), pose.getTx(), pose.getTy(), pose.getTz());
-		Matrix mapPos = this.mapTransformation.getHomogeneousMatrix().times(pose.getHomogeneousMatrix());
+
+		Matrix mapPos;
+		if (Parameters.<Boolean>get("MapView.followCamera")) {
+			mapPos = this.mapTransformation.getHomogeneousMatrix().times(pose.getHomogeneousMatrix());
+		} else {
+			mapPos = this.mapTransformation.getHomogeneousMatrix();
+		}
+
 		this.mapCamera.setMatrix(mapPos.get(0, 0), mapPos.get(0, 1), mapPos.get(0, 2), mapPos.get(1, 0),
 				mapPos.get(1, 1), mapPos.get(1, 2), mapPos.get(2, 0), mapPos.get(2, 1), mapPos.get(2, 2),
 				mapPos.get(0, 3), mapPos.get(1, 3), mapPos.get(2, 3));
-//		this.mapCamera.setMatrix(r00, r01, r02, r10, r11, r12, r20, r21, r22, tx, ty + 0.5, tz + 2);
 	}
 
 	public void detectChanges() {

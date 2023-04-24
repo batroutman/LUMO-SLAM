@@ -1,6 +1,7 @@
 package runtimevars;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,8 +110,18 @@ public final class Parameters {
 
 		// -------- GUI Default Options -------- //
 		parameters.put("ARView.showMapPoints", false); // Boolean
-
 		parameters.put("ARView.showBoundingBoxes", true); // Boolean
+		parameters.put("ARView.showObjectLabels", true); // Boolean
+
+		parameters.put("GUI.view", "ALL"); // String/enum: < "ALL" | "AR" | "PROCESSED" | "MAP" >
+		parameters.put("GUI.featureDisplayType", "POINTS"); // String/enum: < "BOXES" | "POINTS" | "TRACKED_POINTS" |
+															// "NONE" >
+		parameters.put("GUI.mapColorScheme", "DEFAULT"); // String/enum: < "DEFAULT" | "TRACKED" | "PARTITIONS" >
+
+		parameters.put("MapView.followCamera", true); // Boolean
+
+		List<Double> cameraOffset = new ArrayList<Double>(Arrays.asList(0.0, -3.0, -10.0, 0.157, 0.0, 0.0));
+		parameters.put("MapView.cameraOffset", cameraOffset); // List<Double>: [cx, cy, cz, rx, ry, rz]
 	}
 
 	public static void printParams() {
