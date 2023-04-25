@@ -1,6 +1,6 @@
 {
     "// INPUT DATA INFORMATION": "",
-    "inputDataPath": "../datasets/rgbd_dataset_freiburg2_desk/",
+    "inputDataPath": "../datasets/rgbd_dataset_freiburg3_structure_texture_far/",
     "bufferType": "TUM",
     "bowVocabFile": "../BoW/ORBvoc.txt",
 
@@ -9,12 +9,12 @@
     "keyframeTrajectorySavePath": "outputs/kftrajectory.txt",
 
     "// CAMERA INTRINSIC PARAMETERS": "",
-    "fx": 520.9,
-    "fy": 521.0,
-    "cx": 325.1,
-    "cy": 249.7,
+    "fx": 535.4,
+    "fy": 539.2,
+    "cx": 320.1,
+    "cy": 247.6,
     "s": 0,
-    "distCoeffs": [ 0.2312, -0.7849, -0.0033, -0.0001, 0.9172 ],
+    "distCoeffs": [],
 
     "// RESOLUTION INFORMATION": "",
     "// width and height are the width and height of the input images/video": "",

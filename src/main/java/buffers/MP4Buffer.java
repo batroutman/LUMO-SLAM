@@ -11,7 +11,7 @@ import types.FramePack;
 
 public class MP4Buffer implements Buffer<FramePack> {
 
-	public long frameLimit = 999999;
+	public long frameLimit = 999999999;
 	protected List<FramePack> frames = new ArrayList<FramePack>();
 
 	protected String filename = "";

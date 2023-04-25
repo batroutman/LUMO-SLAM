@@ -209,7 +209,7 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 								processedImage.getDescriptors(), mapPointPerDescriptor, includedPrunedCorrespondences,
 								includedPrunedCorrespondenceMapPoints, pose);
 						long e = System.currentTimeMillis();
-						Utils.pl("\n\n\n\npoint inclusion time: " + (e - s) + "ms\n\n\n\n");
+						Utils.pl("point inclusion time: " + (e - s) + "ms");
 
 						// if heavily violating motion model, assume error
 						if (this.map.getCurrentKeyframe().getFrameNum() - this.map.getLastLoopClosedTime() > 2
@@ -232,7 +232,7 @@ public class LUMOSLAM extends SLAMSystem<Map> {
 								avg, stdDev, median);
 
 						// check for poor tracking
-						Utils.pl("\n\nINLIER RATE: " + inlierRate.getValue() + "\n\n");
+						Utils.pl("INLIER RATE: " + inlierRate.getValue() + "");
 						if (inlierRate.getValue() < 0.6 || numTracked.getValue() < 10) {
 							Utils.pl("inlierRate: " + inlierRate);
 							Utils.pl("numTracked: " + numTracked);

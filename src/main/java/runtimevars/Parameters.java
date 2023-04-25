@@ -25,11 +25,11 @@ public final class Parameters {
 		parameters.put("bowVocabFile", "../BoW/ORBvoc.txt"); // String
 
 		// -------- trajectory save data -------- //
-		parameters.put("trajectorySavePath", "trajectory.txt"); // String
-		parameters.put("keyframeTrajectorySavePath", "kftrajectory.txt"); // String
-		parameters.put("movingObjectTrajectoryPathJSON", "moTrajectories.json"); // String
-		parameters.put("movingObjectTrajectoryPathTXT", "moTrajectories"); // String
-		parameters.put("markerSimTransformPath", "markerSimTransform.json"); // String
+		parameters.put("trajectorySavePath", "outputs/trajectory.txt"); // String
+		parameters.put("keyframeTrajectorySavePath", "outputs/kftrajectory.txt"); // String
+		parameters.put("movingObjectTrajectoryPathJSON", "outputs/moTrajectories.json"); // String
+		parameters.put("movingObjectTrajectoryPathTXT", "outputs/moTrajectories"); // String
+		parameters.put("markerSimTransformPath", "outputs/markerSimTransform.json"); // String
 
 		// -------- camera parameters -------- //
 		parameters.put("fx", 535.4f); // Float

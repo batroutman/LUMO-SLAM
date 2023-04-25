@@ -4,17 +4,21 @@ LUMO-SLAM is a markerless, monocular SLAM system that can also detect and locali
 
 https://user-images.githubusercontent.com/17709606/207700356-9f148d86-9176-4f93-841a-bbf9ce1e53a9.mp4
 
-
 ## Citing
-If you would like to cite this work, you can reference the following paper:
+If you would like to cite this work, you can reference our most recent paper from ICIR:
 ```
-@inproceedings{Troutman2022RegistrationSLAM,
-  title={Registration and Localization of Unknown Moving Objects in Monocular {SLAM}},
+@INPROCEEDINGS{10070913,
   author={Troutman, Blake and Tuceryan, Mihran},
-  booktitle={International Conference on Intelligent Reality},
-  year={2022}
+  booktitle={2022 IEEE 2nd International Conference on Intelligent Reality (ICIR)}, 
+  title={Registration and Localization of Unknown Moving Objects in Monocular SLAM}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={43-48},
+  doi={10.1109/ICIR55739.2022.00025}
 }
 ```
+A journal article covering all updated system details and quantitative results is currently in the works for publication in 2023, so check back later for an updated citation.
 
 ## Installation
 This system is implemented in **Java 1.8**. Java is used instead of C++ in an effort to make it easier to port the system to android devices in the future (though there are currently no concrete plans to do so—feel free to adapt this system to android yourself if you need a mobile implementation of this system).
@@ -32,7 +36,7 @@ The libraries required by the system are specified below.
 
 ### lwjgl 3.2.3 - Lightweight Java Game Library
 - https://www.lwjgl.org/
-- lwjgl is a Java graphics library which, in this project, is used for its implementation of OpenGL. 
+- lwjgl is a Java graphics library which, in this project, is used for its implementation of the OpenGL. 
 - NOTE: ADD OTHER SYSTEM BINARIES TO GRADLE FILE FOR LWJGL
 
 ### Jama 1.0.2
@@ -52,7 +56,7 @@ The libraries required by the system are specified below.
 - https://github.com/opencv/opencv/tree/3.4
 - https://github.com/opencv/opencv_contrib/tree/3.4 (extra modules, required)
 - OpenCV is the library that handles almost all of the standard computer vision algorithms for this project.
-- opencv_contrib is required for the ArUco marker tracking that is used when developing groundtruth data. Markers are otherwise not used in the typical operation of the SLAM system.
+- opencv_contrib is required for the ArUco marker tracking that is used when developing groundtruth data. Markers are otherwise not used in the typical operation of LUMO-SLAM system.
 
 ### BoofCV 0.36
 - http://boofcv.org/index.php?title=Download
@@ -69,7 +73,8 @@ The libraries required by the system are specified below.
 - After downloading this text file, it will need to be referenced in your config file (specified below).
 
 ## Running the System
-The system currently parses 2 formats of video data: mp4 files and sequence data from the TUM RGB-D dataset (https://vision.in.tum.de/data/datasets/rgbd-dataset). Once you have a sequence downloaded, run the system with the `-config <config_file.json>` argument to specify input data. Config files take the form of the following*:
+### Configuration Files
+The system currently parses 2 formats of video data: mp4 files and sequence data from the TUM RGB-D dataset (https://vision.in.tum.de/data/datasets/rgbd-dataset). Once you have a sequence downloaded, run the system with the `-config <config_file.json>` argument to specify input data. Config files take the following form:
 
 ```json
 {
@@ -78,9 +83,9 @@ The system currently parses 2 formats of video data: mp4 files and sequence data
 	"bufferType": "TUM",
 	"bowVocabFile": "../BoW/ORBvoc.txt",
 	
-	"// TRAJECTORY SAVE INFORMATION": "",
-	"trajectorySavePath": "trajectory.txt",
-	"keyframeTrajectorySavePath": "kftrajectory.txt",
+	"// TRAJECTORY SAVE INFORMATION": "(Output data info)",
+	"trajectorySavePath": "outputs/trajectory.txt",
+	"keyframeTrajectorySavePath": "outputs/kftrajectory.txt",
 	
 	"// CAMERA INTRINSIC PARAMETERS": "",
 	"fx": 535.4,
@@ -102,9 +107,37 @@ The system currently parses 2 formats of video data: mp4 files and sequence data
 	"cubes": [[ 0, 4, 12, 53, 10, 250, 2 ], [ -12, 0, 22, 250, 70, 12, 2 ], [ -21, -3, 29, 20, 100, 300, 2 ]]
 }
 ```
+Example configuration files for TUM-freiburg1, TUM-freiburg2, TUM-freiburg3, and custom MP4 files are provided in `TUM1Config.json`, `TUM2Config.json`, `TUM3Config.json`, and `mp4Config.json`, respectively. Note, that the camera parameters will need to be changed to match the camera used in your MP4 sequence. The camera parameters currently populating `mp4Config.json` correspond to a Samsung Galaxy S8 smartphone using the Open Camera app.
 
-*Further config options to be specified upon project completion.
+Additionally, comprehensive usage of all configuration parameters are shown in `mp4Config.json`.
+
+To get started, download the `freiburg3_structure_texture_far` sequence from the [TUM dataset website](https://vision.in.tum.de/data/datasets/rgbd-dataset), update the `inputDataPath` parameter in `TUM3Config.json` to point to its base directory, and run the system with the `-config TUM3Config.json` argument.
+
+**NOTE**: If you find that the system is struggling to initialize a map, set `"smartInitialization"` to `false` to use brute-force initialization. Smart initialization is a proof-of-concept technique whose models were only trained on TUM sequences.
+
+### Map Navigation
+The camera for the map view can also be transformed in realtime to analyze the system's map. The controls are as follows:
+
+`W` - move forward\
+`S` - move backward\
+`A` - strafe left\
+`D` - strafe right\
+`SPACE` - move up\
+`SHIFT` - move down
+
+`←` - turn left\
+`→` - turn right\
+`↑` - look up\
+`↓` - look down
+
+`<` - tilt counter-clockwise\
+`>` - tilt clockwise
+
+`J` - decrease move/turn/tilt speed\
+`K` - increase move/turn/tilt speed
+
+
 
 ## Disclaimer
-This project is a culmination of the years of research I have done for my Ph.D.; as such, it is research-quality code whose design and coding practices have changed many times over several years. Though the code is annotated and should not be excessively difficult for researchers and other interested parties to parse, do not view this project as a model for good software design.
+This project is a culmination of the years of research I have done for my Ph.D.; as such, it is research-quality code whose design and coding practices have changed many times over several years. Though the code is annotated and should not be excessively difficult for researchers and other interested parties to parse, I make no claims that this codebase is the pinnacle of good software design.
 
