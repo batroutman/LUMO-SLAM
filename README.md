@@ -5,17 +5,16 @@ LUMO-SLAM is a markerless, monocular SLAM system that can also detect and locali
 https://user-images.githubusercontent.com/17709606/207700356-9f148d86-9176-4f93-841a-bbf9ce1e53a9.mp4
 
 ## Citing
-If you would like to cite this work, you can reference our most recent paper from ICIR:
+If you would like to cite this work, you can reference the following thesis:
 ```
-@INPROCEEDINGS{10070913,
-  author={Troutman, Blake and Tuceryan, Mihran},
-  booktitle={2022 IEEE 2nd International Conference on Intelligent Reality (ICIR)}, 
-  title={Registration and Localization of Unknown Moving Objects in Monocular SLAM}, 
-  year={2022},
-  volume={},
-  number={},
-  pages={43-48},
-  doi={10.1109/ICIR55739.2022.00025}
+@phdthesis{TroutmanThesis2023,
+    author = "Blake Austin Troutman",
+    title = "{Registration and Localization of Unknown Moving Objects in Markerless Monocular SLAM}",
+    school = "Purdue University, Indianapolis",
+    year = "2023",
+    month = "5",
+    url = "https://hammer.purdue.edu/articles/thesis/Registration_and_Localization_of_Unknown_Moving_Objects_in_Markerless_Monocular_SLAM/22645324",
+    doi = "10.25394/PGS.22645324.v1"
 }
 ```
 A journal article covering all updated system details and quantitative results is currently in the works for publication in 2023, so check back later for an updated citation.
