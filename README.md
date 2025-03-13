@@ -4,8 +4,25 @@ LUMO-SLAM is a markerless, monocular SLAM system that can also detect and locali
 
 https://user-images.githubusercontent.com/17709606/207700356-9f148d86-9176-4f93-841a-bbf9ce1e53a9.mp4
 
+For a condensed technical report covering the architecture and algorithms used in LUMO-SLAM, visit [https://web.ics.purdue.edu/~mtucerya/tech-reports/TR-CIS-0124-01.pdf](https://web.ics.purdue.edu/~mtucerya/tech-reports/TR-CIS-0124-01.pdf).
+
 ## Citing
-If you would like to cite this work, you can reference the following thesis:
+If you would like to cite this work, you can reference the following technical report:
+```
+@techreport{Troutman2024LUMOSLAM,
+    author      = {Troutman, Blake and Tuceryan, Mihran},
+    title       = {{LUMO-SLAM}: A Solution for Monocular Dynamic {SLAM}},
+    institution = {Purdue University},
+    year        = {2024},
+    type        = {Technical Report},
+    number      = {TR-CIS-0124-01},
+    address     = {Indianapolis, Indiana},
+    month       = {January},
+    url         = {https://web.ics.purdue.edu/~mtucerya/tech-reports/TR-CIS-0124-01.pdf}
+}
+```
+
+Or, you can reference the original dissertation:
 ```
 @phdthesis{TroutmanThesis2023,
     author = "Blake Austin Troutman",
@@ -17,7 +34,6 @@ If you would like to cite this work, you can reference the following thesis:
     doi = "10.25394/PGS.22645324.v1"
 }
 ```
-A journal article covering all updated system details and quantitative results is currently in the works for publication in 2023, so check back later for an updated citation.
 
 ## Installation
 This system is implemented in **Java 1.8**. Java is used instead of C++ in an effort to make it easier to port the system to android devices in the future (though there are currently no concrete plans to do so—feel free to adapt this system to android yourself if you need a mobile implementation of this system).
